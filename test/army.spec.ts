@@ -5,7 +5,7 @@ import { SimpleReporter } from '../simple-reporter';
 describe('Army API Test', () => {
   const p = pactum;
   const rep = SimpleReporter;
-  const baseUrl = 'http://localhost:8080';
+  const baseUrl = 'https://api-c5t9.onrender.com';
 
   p.request.setDefaultTimeout(10000);
 
