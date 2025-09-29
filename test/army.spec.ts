@@ -2,7 +2,7 @@ import pactum from 'pactum';
 import { StatusCodes } from 'http-status-codes';
 import { SimpleReporter } from '../simple-reporter';
 
-describe('Army API Test', () => {
+describe('Army Test', () => {
   const p = pactum;
   const rep = SimpleReporter;
   const baseUrl = 'https://api-c5t9.onrender.com';
