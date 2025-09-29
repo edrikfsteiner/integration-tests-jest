@@ -2,7 +2,7 @@ import pactum from 'pactum';
 import { StatusCodes } from 'http-status-codes';
 import { SimpleReporter } from '../simple-reporter';
 
-describe('Teste endpoint /armies', () => {
+describe('Teste endpoint /provinces', () => {
   const p = pactum;
   const rep = SimpleReporter;
   const baseUrl = 'https://api-c5t9.onrender.com';
@@ -16,7 +16,7 @@ describe('Teste endpoint /armies', () => {
       .spec()
       .post(`${baseUrl}/countries`)
       .withJson({
-        name: 'País de Teste para Exércitos'
+        name: 'País de Teste para Províncias'
       })
       .expectStatus(StatusCodes.OK)
       .stores('CountryId', 'id');
@@ -26,80 +26,75 @@ describe('Teste endpoint /armies', () => {
     p.reporter.end();
   });
 
-  describe('Exércitos', () => {
-    const armyName = 'Exército de Teste';
-    const updatedArmyName = 'Exército de Teste Atualizado';
+  describe('Províncias', () => {
+    const provinceName = 'Província de Teste';
+    const updatedProvinceName = 'Capital de Teste';
 
-    it('Deve criar exército', async () => {
+    it('Deve criar província', async () => {
       await p
         .spec()
-        .post(`${baseUrl}/armies`)
+        .post(`${baseUrl}/provinces`)
         .withJson({
-          name: armyName,
+          name: provinceName,
+          population: 50000,
           country: {
             id: '$S{CountryId}'
           },
-          divisions: []
+          buildings: []
         })
         .expectStatus(StatusCodes.OK)
         .expectJsonLike({
-          name: armyName
+          name: provinceName
         })
-        .stores('ArmyId', 'id');
+        .stores('ProvinceId', 'id');
     });
 
-    it('Deve retornar todos os exércitos', async () => {
+    it('Deve retornar todas as províncias', async () => {
       await p
         .spec()
-        .get(`${baseUrl}/armies`)
+        .get(`${baseUrl}/provinces`)
         .expectStatus(StatusCodes.OK)
         .expectJsonSchema({
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: { type: 'number' },
-              name: { type: 'string' }
-            }
-          }
+          type: 'array'
         });
     });
 
-    it('Deve retornar exército por id', async () => {
+    it('Deve retornar província por id', async () => {
       await p
         .spec()
-        .get(`${baseUrl}/armies/$S{ArmyId}`)
+        .get(`${baseUrl}/provinces/$S{ProvinceId}`)
         .expectStatus(StatusCodes.OK)
         .expectJsonLike({
-          id: '$S{ArmyId}',
-          name: armyName
+          id: '$S{ProvinceId}',
+          name: provinceName
         });
     });
 
-    it('Deve atualizar exército', async () => {
+    it('Deve atualizar província', async () => {
       await p
         .spec()
-        .put(`${baseUrl}/armies`)
+        .put(`${baseUrl}/provinces`)
         .withJson({
-          id: '$S{ArmyId}',
-          name: updatedArmyName,
+          id: '$S{ProvinceId}',
+          name: updatedProvinceName,
+          population: 75000,
           country: {
             id: '$S{CountryId}'
           }
         })
         .expectStatus(StatusCodes.OK)
         .expectJsonLike({
-          id: '$S{ArmyId}',
-          name: updatedArmyName
+          id: '$S{ProvinceId}',
+          name: updatedProvinceName
         });
     });
 
-    it('Deve excluir exército', async () => {
+    it('Deve excluir província', async () => {
       await p
         .spec()
-        .delete(`${baseUrl}/armies/$S{ArmyId}`)
+        .delete(`${baseUrl}/provinces/$S{ProvinceId}`)
         .expectStatus(StatusCodes.OK)
-        .expectBodyContains('Army deleted');
+        .expectBodyContains('Province deleted');
     });
   });
 });
